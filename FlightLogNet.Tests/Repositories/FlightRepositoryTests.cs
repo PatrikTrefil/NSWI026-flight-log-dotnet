@@ -21,7 +21,7 @@ namespace FlightLogNet.Tests.Repositories
             TestDatabaseGenerator.RenewDatabase(configuration);
         }
 
-        [Fact(Skip = "Not correctly implemented.")]
+        [Fact]
         public void GetFlightsOfTypeGlider_Return2Gliders()
         {
             // Arrange
