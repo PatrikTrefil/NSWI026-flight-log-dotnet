@@ -9,7 +9,7 @@
 
     internal static class InjectConfiguration
     {
-        internal static void Initialization(IServiceCollection services)
+        internal static void Initialization(IServiceCollection services, bool isInTestEnvironment = false)
         {
             services.AddScoped<IAirplaneRepository, AirplaneRepository>();
             services.AddScoped<IFlightRepository, FlightRepository>();
@@ -24,8 +24,10 @@
             services.AddScoped<PersonFacade, PersonFacade>();
             services.AddScoped<FlightFacade, FlightFacade>();
 
-            //services.AddScoped<IClubUserDatabase, ClubUserDatabaseStub>();
-            services.AddScoped<IClubUserDatabase, ClubUserDatabase>();
+            if (isInTestEnvironment)
+                services.AddScoped<IClubUserDatabase, ClubUserDatabaseStub>();
+            else
+                services.AddScoped<IClubUserDatabase, ClubUserDatabase>();
         }
     }
 }

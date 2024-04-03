@@ -2,19 +2,17 @@
 {
     using System;
     using System.Diagnostics;
-
+    using Microsoft.Extensions.Configuration;
     using Models;
     using Repositories;
     using Repositories.Entities;
-    
-    using Microsoft.Extensions.Configuration;
 
     internal static class TestDatabaseGenerator
     {
         internal static void RenewDatabase(IConfiguration configuration)
         {
             DeleteOldDatabase(configuration);
-            CreateTestDatabaseWithFixedTime(DateTime.Now, configuration);
+            CreateTestDatabaseWithFixedTime(new DateTime(2021, 1, 7, 16, 47, 10), configuration);
         }
 
         public static void DeleteOldDatabase(IConfiguration configuration)
