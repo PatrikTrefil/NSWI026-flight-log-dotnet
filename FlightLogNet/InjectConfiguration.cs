@@ -2,11 +2,10 @@
 {
     using Facades;
     using Integration;
+    using Microsoft.Extensions.DependencyInjection;
     using Operation;
     using Repositories;
     using Repositories.Interfaces;
-
-    using Microsoft.Extensions.DependencyInjection;
 
     internal static class InjectConfiguration
     {
@@ -25,8 +24,8 @@
             services.AddScoped<PersonFacade, PersonFacade>();
             services.AddScoped<FlightFacade, FlightFacade>();
 
-            services.AddScoped<IClubUserDatabase, ClubUserDatabaseStub>();
-            // services.AddScoped<IClubUserDatabase, ClubUserDatabase>();
+            //services.AddScoped<IClubUserDatabase, ClubUserDatabaseStub>();
+            services.AddScoped<IClubUserDatabase, ClubUserDatabase>();
         }
     }
 }
