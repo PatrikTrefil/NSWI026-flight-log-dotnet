@@ -1,12 +1,10 @@
 namespace FlightLogNet.Tests.Operation
 {
-    using Integration;
-    using Models;
     using FlightLogNet.Operation;
     using FlightLogNet.Repositories.Interfaces;
-
+    using Integration;
+    using Models;
     using Moq;
-
     using Xunit;
 
     public class CreatePersonOperationTests
@@ -70,13 +68,28 @@ namespace FlightLogNet.Tests.Operation
         public void Execute_ShouldCreateNewClubMember()
         {
             // Arrange
+            var createPersonOperation = CreateCreatePersonOperation();
+            PersonModel clubUser = new PersonModel
+            {
+                FirstName = "Jan",
+                LastName = "Novák",
+                MemberId = 333
+            };
 
-            // TODO 7.1: Naimplementujte test s použitím mockù
+            long id = clubUser.MemberId;
+
+            // When it tries to find out if the person is in the reposiory already, it should not be there
+            mockPersonRepository.Setup(repository => repository.TryGetPerson(clubUser, out id)).Returns(false);
+            // When it tries to find out if the person is in the club user database, it should be there
+            mockClubUserDatabase.Setup(db => db.TryGetClubUser(id, out clubUser)).Returns(true);
+            // When it then adds the person to the repository, it should return the expected id
+            mockPersonRepository.Setup(repository => repository.CreateClubMember(clubUser)).Returns(id);
 
             // Act
-
+            var result = createPersonOperation.Execute(clubUser);
             // Assert
-
+            Assert.Equal(id, result);
+            mockRepository.VerifyAll();
         }
     }
 }
