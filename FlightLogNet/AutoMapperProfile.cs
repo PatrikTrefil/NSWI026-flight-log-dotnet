@@ -4,7 +4,7 @@
     using System.Linq.Expressions;
 
     using AutoMapper;
-
+    using FlightLogNet.Operation;
     using Integration;
     using Models;
     using Repositories.Entities;
@@ -21,6 +21,17 @@
             this.CreateMap<Person, PersonModel>();
             this.CreateMap<ClubUser, PersonModel>()
                 .ForMember(dest => dest.Address, opt => opt.Ignore());
+            this.CreateMap<FlightModel, GetExportToCsvOperation.CsvExportFlightModel>()
+                .ForMember(dest => dest.FlightSpan, opt => opt.MapFrom(flightModel => flightModel.LandingTime != null
+                    ? flightModel.LandingTime - flightModel.TakeoffTime
+                    : null
+                ))
+                .ForMember(dest => dest.TakeoffTime, opt => opt.MapFrom(flightModel => flightModel.TakeoffTime.TimeOfDay))
+                .ForMember(dest => dest.LandingTime, opt => opt.MapFrom<TimeSpan?>(flightModel => flightModel.LandingTime != null
+                    ? flightModel.LandingTime.Value.TimeOfDay
+                    : null
+                    ))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom<DateTime?>(flightModel => flightModel.Task == "VLEK" ? flightModel.TakeoffTime.Date : null));
         }
 
         private void CreateMapAirplanes()
