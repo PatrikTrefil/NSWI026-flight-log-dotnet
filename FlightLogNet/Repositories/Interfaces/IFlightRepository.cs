@@ -15,5 +15,6 @@
         long CreateFlight(CreateFlightModel model);
 
         IList<FlightModel> GetFlightsOfType(FlightType type);
+        IList<FlightModel> GetPlanesInTheAir();
     }
 }

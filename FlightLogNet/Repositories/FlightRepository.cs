@@ -3,13 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     using AutoMapper;
-
-    using Models;
     using Entities;
     using Interfaces;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Models;
@@ -25,14 +21,26 @@
             return mapper.ProjectTo<FlightModel>(flights).ToList();
         }
 
-        // TODO 2.3: Vytvořte metodu, která načte letadla, která jsou ve vzduchu, seřadí je od nejstarších,
-        // a v případě shody dá vlečné pred kluzák, který táhne
+        public IList<FlightModel> GetPlanesInTheAir()
+        {
+            using var dbContext = new LocalDatabaseContext(configuration);
+
+            var flights = dbContext.Flights
+                .Include(flight => flight.Airplane)
+                .Include(flight => flight.Copilot)
+                .Include(flight => flight.Pilot)
+                .Where(flight => flight.LandingTime == null)
+                .OrderBy(flight => flight.TakeoffTime)
+                .ThenBy(flight => flight.Type);
+
+            return mapper.ProjectTo<FlightModel>(flights).ToList();
+        }
 
         public void LandFlight(FlightLandingModel landingModel)
         {
             using var dbContext = new LocalDatabaseContext(configuration);
 
-            var flight = dbContext.Flights.Find(landingModel.FlightId) 
+            var flight = dbContext.Flights.Find(landingModel.FlightId)
                          ?? throw new NotSupportedException($"Unable to land not-registered flight: {landingModel}.");
             flight.LandingTime = landingModel.LandingTime;
             dbContext.SaveChanges();

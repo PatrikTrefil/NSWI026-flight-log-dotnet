@@ -35,7 +35,7 @@ namespace FlightLogNet.Tests.Repositories
             Assert.True(result.Count == 2, "In test database is 2 gliders.");
         }
 
-        [Fact(Skip = "Not correctly implemented.")]
+        [Fact]
         public void GetAirplanesInAir_ReturnFlightModels()
         {
             // Arrange
@@ -43,8 +43,7 @@ namespace FlightLogNet.Tests.Repositories
             var flightRepository = this.CreateFlightRepository();
 
             // Act
-            // TODO 2.4: Dopl�te metodu repozit��e a odstra�te p�esko�en� testu (skip)
-            IList<FlightModel> result = null;
+            IList<FlightModel> result = flightRepository.GetPlanesInTheAir();
 
             // Assert
             Assert.NotEmpty(result);
