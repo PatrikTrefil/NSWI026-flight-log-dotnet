@@ -12,15 +12,15 @@
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
+    using Models;
 
     public class FlightRepository(IMapper mapper, IConfiguration configuration) : IFlightRepository
     {
-        // TODO 2.1: Upravte metodu tak, aby vrátila pouze lety specifického typu
-        public IList<FlightModel> GetAllFlights()
+        public IList<FlightModel> GetFlightsOfType(FlightType type)
         {
             using var dbContext = new LocalDatabaseContext(configuration);
 
-            var flights = dbContext.Flights;
+            var flights = dbContext.Flights.Where(flight => flight.Type == type);
 
             return mapper.ProjectTo<FlightModel>(flights).ToList();
         }

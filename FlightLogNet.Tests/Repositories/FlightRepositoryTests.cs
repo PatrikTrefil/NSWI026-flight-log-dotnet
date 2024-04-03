@@ -2,16 +2,12 @@ namespace FlightLogNet.Tests.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using AutoMapper;
-
     using FlightLogNet.Models;
     using FlightLogNet.Repositories;
     using FlightLogNet.Repositories.Interfaces;
-
-    using Xunit;
-
     using Microsoft.Extensions.Configuration;
+    using Xunit;
 
     public class FlightRepositoryTests(IMapper mapper, IConfiguration configuration)
     {
@@ -33,8 +29,7 @@ namespace FlightLogNet.Tests.Repositories
             var flightRepository = this.CreateFlightRepository();
 
             // Act
-            // TODO 2.2: Upravte volanou metodu, aby výsledek vrátil pouze lety, které jsou kluzáky.
-            var result = flightRepository.GetAllFlights();
+            var result = flightRepository.GetFlightsOfType(FlightType.Glider);
 
             // Assert
             Assert.True(result.Count == 2, "In test database is 2 gliders.");
@@ -48,7 +43,7 @@ namespace FlightLogNet.Tests.Repositories
             var flightRepository = this.CreateFlightRepository();
 
             // Act
-            // TODO 2.4: Doplòte metodu repozitáøe a odstraòte pøeskoèení testu (skip)
+            // TODO 2.4: Doplï¿½te metodu repozitï¿½ï¿½e a odstraï¿½te pï¿½eskoï¿½enï¿½ testu (skip)
             IList<FlightModel> result = null;
 
             // Assert
