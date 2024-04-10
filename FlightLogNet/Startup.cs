@@ -22,8 +22,7 @@ namespace FlightLogNet
             services.AddControllers();
             services.AddAutoMapper(typeof(AutoMapperProfile));
             // services.AddAutoMapper(System.Reflection.Assembly.GetCallingAssembly());
-            services.AddCors(options =>
-            {
+            services.AddCors(options => {
                 options.AddDefaultPolicy(
                     policy => {
                         string[] origins = this.Configuration.GetSection(AllowedOrigins).Get<string[]>();
@@ -37,6 +36,9 @@ namespace FlightLogNet
                         }
                     });
             });
+            services.AddOpenApiDocument(document => {
+                document.Title = "FlighLog";
+            }); // registers a OpenAPI v3.0 document with the name "v1"
         }
 
         // ReSharper disable once UnusedMember.Global - used by Framework
@@ -44,6 +46,9 @@ namespace FlightLogNet
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IMapper mapper, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddLog4Net();
+
+            app.UseOpenApi(); // Serves the registered OpenAPI/Swagger documents by default on `/swagger/{documentName}/swagger.json`
+            app.UseSwaggerUi(); // Serves the Swagger UI 3 web ui to view the OpenAPI/Swagger documents by default on `/swagger`
 
             app.UseDefaultFiles();
 
@@ -61,7 +66,7 @@ namespace FlightLogNet
                     TestDatabaseGenerator.InitializeDatabase(this.Configuration);
                 }
             }
-            
+
             app.UseRouting();
             app.UseCors();
             app.UseStaticFiles();
