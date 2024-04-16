@@ -31,7 +31,7 @@
                     ? flightModel.LandingTime.Value.TimeOfDay
                     : null
                     ))
-                .ForMember(dest => dest.Date, opt => opt.MapFrom<DateTime?>(flightModel => flightModel.Task == "VLEK" ? flightModel.TakeoffTime.Date : null));
+                .ForMember(dest => dest.Date, opt => opt.MapFrom<DateTime?>(flightModel => flightModel.Task == "VLEK" ? null : flightModel.TakeoffTime.Date));
         }
 
         private void CreateMapAirplanes()
